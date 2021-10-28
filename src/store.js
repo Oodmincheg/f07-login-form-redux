@@ -1,4 +1,5 @@
 import { createStore } from 'redux';
+import { UPDATE_PASSWORD, VALIDATE, UPDATE_LOGIN } from './action';
 
 const MIN_LENGTH = 6;
 
@@ -12,13 +13,13 @@ function reducer(
   action,
 ) {
   switch (action.type) {
-    case 'updateLogin': {
+    case UPDATE_LOGIN: {
       return { ...state, login: action.payload, errorLogin: '' };
     }
-    case 'updatePassword': {
+    case UPDATE_PASSWORD: {
       return { ...state, password: action.payload };
     }
-    case 'validateForm': {
+    case VALIDATE: {
       let errorLogin = '';
       let errorPassword = '';
       if (state.login.length < MIN_LENGTH) {

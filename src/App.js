@@ -1,5 +1,7 @@
 import { BaseInput } from './components/BaseInput/';
 import { useSelector, useDispatch } from 'react-redux';
+import { updatePassword, VALIDATE, UPDATE_LOGIN } from './action';
+
 import './App.css';
 
 function App() {
@@ -12,15 +14,15 @@ function App() {
   const dispatch = useDispatch();
 
   function handleLoginChange(event, type) {
-    dispatch({ type: 'updateLogin', payload: event.target.value });
+    dispatch({ type: UPDATE_LOGIN, payload: event.target.value });
   }
 
   function handlePasswordChange(event) {
-    dispatch({ type: 'updatePassword', payload: event.target.value });
+    dispatch(updatePassword(event.target.value));
   }
 
   function submitLogin() {
-    dispatch({ type: 'validateForm' });
+    dispatch({ type: VALIDATE });
 
     // fetch('https://google.com', {
     //   method: 'POST',
