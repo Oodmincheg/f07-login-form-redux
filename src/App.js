@@ -3,8 +3,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import './App.css';
 
 function App() {
-  const login = useSelector((state) => state.login);
-  const password = useSelector((state) => state.password);
+  const login = useSelector((state) => state.login); //state.login
+  const errorLogin = useSelector((state) => state.errorLogin);
+  const errorPassword = useSelector((state) => state.errorPassword);
+
+  const password = useSelector((state) => state.password); // state.password
 
   const dispatch = useDispatch();
 
@@ -17,13 +20,15 @@ function App() {
   }
 
   function submitLogin() {
-    fetch('https://google.com', {
-      method: 'POST',
-      body: JSON.stringify({ login, password }),
-    })
-      .then((data) => data.json())
-      .then((data) => dispatch({ type: 'lol', payload: data }))
-      .catch((err) => console.error(err));
+    dispatch({ type: 'validateForm' });
+
+    // fetch('https://google.com', {
+    //   method: 'POST',
+    //   body: JSON.stringify({ login, password }),
+    // })
+    //   .then((data) => data.json())
+    //   .then((data) => dispatch({ type: 'lol', payload: data }))
+    //   .catch((err) => console.error(err));
   }
 
   return (
@@ -34,6 +39,7 @@ function App() {
         labelText="Login:"
         value={login}
         onChange={handleLoginChange}
+        error={errorLogin}
       />
       <BaseInput
         name="password"
@@ -42,6 +48,7 @@ function App() {
         labelText="Password:"
         value={password}
         onChange={handlePasswordChange}
+        error={errorPassword}
       />
       <button type="button" onClick={submitLogin}>
         Submit login

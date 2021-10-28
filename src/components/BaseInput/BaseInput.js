@@ -1,5 +1,7 @@
 import React from 'react';
 
+const errorStyle = { color: 'red' };
+
 export default function Input({
   labelText,
   type = 'text',
@@ -7,6 +9,7 @@ export default function Input({
   name,
   value,
   onChange,
+  error,
 }) {
   return (
     <div>
@@ -18,6 +21,7 @@ export default function Input({
         value={value}
         onChange={onChange}
       />
+      {error ? <div style={errorStyle}>{error}</div> : null}
     </div>
   );
 }
