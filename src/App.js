@@ -1,29 +1,37 @@
+import { useEffect } from 'react';
 import { BaseInput } from './components/BaseInput/';
 import { useSelector, useDispatch } from 'react-redux';
-import { updatePassword, VALIDATE, UPDATE_LOGIN } from './action';
+import { updatePassword, validate, updateLogin, getCharacters } from './action';
 
 import './App.css';
 
 function App() {
-  const login = useSelector((state) => state.login); //state.login
-  const errorLogin = useSelector((state) => state.errorLogin);
-  const errorPassword = useSelector((state) => state.errorPassword);
-
-  const password = useSelector((state) => state.password); // state.password
+  const login = useSelector(function (state) {
+    return state.login.login;
+  }); //state.login
+  const errorLogin = useSelector(({ login }) => login.errorLogin);
+  const errorPassword = useSelector((state) => state.login.errorPassword);
+  const password = useSelector((state) => state.login.password); // state.password
+  const characters = useSelector((state) => state.rickNMorty.characters);
+  const loading = useSelector((state) => state.rickNMorty.loading);
 
   const dispatch = useDispatch();
 
-  function handleLoginChange(event, type) {
-    dispatch({ type: UPDATE_LOGIN, payload: event.target.value });
+  function handleLoginChange(event) {
+    dispatch(updateLogin(event.target.value));
   }
 
   function handlePasswordChange(event) {
     dispatch(updatePassword(event.target.value));
   }
 
-  function submitLogin() {
-    dispatch({ type: VALIDATE });
+  useEffect(() => {
+    dispatch(getCharacters());
+  }, [dispatch]);
 
+  function submitLogin() {
+    dispatch(validate());
+    // dispatch(getData())
     // fetch('https://google.com', {
     //   method: 'POST',
     //   body: JSON.stringify({ login, password }),
@@ -34,28 +42,35 @@ function App() {
   }
 
   return (
-    <form>
-      <BaseInput
-        name="login"
-        placeholder="Please enter your login"
-        labelText="Login:"
-        value={login}
-        onChange={handleLoginChange}
-        error={errorLogin}
-      />
-      <BaseInput
-        name="password"
-        type="password"
-        placeholder="Please enter your password"
-        labelText="Password:"
-        value={password}
-        onChange={handlePasswordChange}
-        error={errorPassword}
-      />
-      <button type="button" onClick={submitLogin}>
-        Submit login
-      </button>
-    </form>
+    <>
+      <form>
+        <BaseInput
+          name="login"
+          placeholder="Please enter your login"
+          labelText="Login:"
+          value={login}
+          onChange={handleLoginChange}
+          error={errorLogin}
+        />
+        <BaseInput
+          name="password"
+          type="password"
+          placeholder="Please enter your password"
+          labelText="Password:"
+          value={password}
+          onChange={handlePasswordChange}
+          error={errorPassword}
+        />
+        <button type="button" onClick={submitLogin}>
+          Submit login
+        </button>
+      </form>
+      {loading ? (
+        <div>Loading...</div>
+      ) : (
+        characters.map((char) => <div>{char.name}</div>)
+      )}
+    </>
   );
 }
 
